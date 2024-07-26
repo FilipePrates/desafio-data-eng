@@ -26,7 +26,18 @@
 
 **LOAD**: -> ⬆️ Carregar Logs para o Banco de Dados
 
+##
+
+### Funcionalidades:
+- **Captura dos dados mais recentes** (`python run/capture.py`)
+- **Materialização dos dados mais recentes** (`python run/materialize.py`)
+- **Captura dos dados históricos** - Todos os dados já disponibilizados (`python run/historic_capture.py`)
+- **Materialização dos dados históricos** - 🚧 Não trata erro de offset de colunas em dados históricos (`python run/historic_materialize.py`)
+- **Scheduler** - Definição de cronograma de execução de flows Prefect de captura e materialização (`python run/scheduler.py`)
+- **Results** - App Dash para visualizar tabelas resultantes armazenadas no banco de dados PostgreSQL (`python run/results.py`)
+
 ---
+**Para Capturar e Materializar os Dados Abertos de Terceirizados de Órgãos Federais:**
 
 Configure ambiente virtual python, variáveis de ambiente necessárias, e baixe os requerimentos do sistema:
 
@@ -89,10 +100,8 @@ Em um terceiro terminal, visualize os resultados:
    python ./run/results.py
    ```
 
-### App Dash (localhost:8050) para visualizar tabelas do PostgreSQL
+#### **App Dash [localhost:8050](localhost:8050) para visualizar tabelas do PostgreSQL**
 ![dash_visualization_staging_transformed](images/dash_visualization_staging_historic_transformed.png)
-![dash_logs_FAIL_historic_capture](images/dash_logs_FAIL_historic_capture.png)
-
 ---
 ### Programe Cronograma para Captura :
 
@@ -103,17 +112,8 @@ Em um terceiro terminal, visualize os resultados:
 
 A Captura e Materialização dos dados mais recentes é programada para ocorrer **a cada 4 meses, começando em Maio**. Se ocorrer uma falha no Flow, uma nova tentativa ocorre diaramente até ser bem sucedida.
 
-### Dashboard Prefect (localhost:8080) para acompanhar os Flows:
+#### Dashboard Prefect [localhost:8080](localhost:8080) para acompanhar os Flows:
 ![prefect_dashboard_capture_flow_visualization](images/prefect_dashboard_capture_flow_visualization.png)
-
-### Funcionalidades:
-- **Captura dos dados mais recentes** (`python run/capture.py`)
-- **Materialização dos dados mais recentes** (`python run/materialize.py`)
-- **Captura dos dados históricos** - Todos os dados já disponibilizados (`python run/historic_capture.py`)
-- **Materialização dos dados históricos** - 🚧 Não trata erro de offset de colunas em dados históricos (`python run/historic_materialize.py`)
-- **Scheduler** - Definição de cronograma de execução de flows Prefect de captura e materialização (`python run/scheduler.py`)
-- **Results** - App Dash para visualizar tabelas resultantes armazenadas no banco de dados PostgreSQL (`python run/results.py`)
-
 
 #### Alternativamente, através de Bash Script:
 
@@ -198,9 +198,21 @@ caso:
 1. :
    Tente através do WSL
 
+caso:
+&nbsp; Falha (</>) em alguma _@task_ dos Flows:
+
+1. :
+   ```sh
+   source orchestrator/bin/activate && pip install -r requirements/results.txt
+   ```
+2. :
+   ```sh
+   python ./run/results.py
+   ```
+Visualize resultados parciais e logs de falha em [localhost:8050](localhost:8050):
+![dash_logs_FAIL_historic_capture](images/dash_logs_FAIL_historic_capture.png)
 
 ---
 
 Para histórico git antes de (26/jul): 
 https://github.com/FilipePrates/Desafio-CIVITAS-Data-Engineer/commits/main/
-
