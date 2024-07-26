@@ -6,9 +6,9 @@
 
 **EXTRACT**: -> (⬇️) Baixar Dados -> (🧠) Salvar Dados Brutos em Memória ->
 
-**CLEAN**: -> (🔍) Interpretar Dados em DataFrames -> (📥) Salvar Dados como CSVs Localmente ->
+**CLEAN**: -> (🔍) Interpretar Dados em DataFrames -> (📝) Salvar Dados como CSVs Localmente ->
 
-**LOAD**: -> (📦) Carregar CSVs para o Banco de Dados brutos -> (⬆️) Carregar Logs para o Banco de Dados
+**LOAD**: -> (⬆️) Carregar CSVs para o Banco de Dados brutos -> (⬆️) Carregar Logs para o Banco de Dados
 
 ### Flow de Materialização dos Dados
 
