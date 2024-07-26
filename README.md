@@ -1,32 +1,26 @@
-<!-- # Desafio Engenheiro de Dados @ Escritório de Dados -->
-# Capture e Materialize os Dados Abertos de Terceirizados de Órgãos Federais
+# Desafio Engenheiro de Dados @ Escritório de Dados
+## Capture e Materialize os Dados Abertos de Terceirizados de Órgãos Federais
 
-### Flow de Captura de Dados
-**SETUP**: 🧹 Limpar Arquivo de Log -> 🔧 Configurar Arquivo de Log ->
+### Flow de Captura de Dados:
+- **SETUP**: 🧹 Limpar Arquivo de Log -> 🔧 Configurar Arquivo de Log ->
 
-**EXTRACT**: -> ⬇️ Baixar Dados -> 🧠 Salvar Dados Brutos em Memória ->
+- **EXTRACT**: -> ⬇️ Baixar Dados -> 🧠 Salvar Dados Brutos em Memória ->
 
-**CLEAN**: -> 🔍 Interpretar Dados em DataFrames -> 📝 Salvar Dados como CSVs Localmente ->
+- **CLEAN**: -> 🔍 Interpretar Dados em DataFrames -> 📝 Salvar Dados como CSVs Localmente ->
 
-**LOAD**: -> ⬆️ Carregar CSVs para o Banco de Dados brutos -> ⬆️ Carregar Logs para o Banco de Dados
+- **LOAD**: -> ⬆️ Carregar CSVs para o Banco de Dados brutos -> ⬆️ Carregar Logs para o Banco de Dados
 
-### Flow de Materialização dos Dados
+### Flow de Materialização dos Dados:
+- **SETUP**: 🧹 Limpar Arquivo de Log  -> 🔧 Configurar Arquivo de Log ->
 
-**SETUP**: 🧹 Limpar Arquivo de Log  -> 🔧 Configurar Arquivo de Log ->
-
-**TRANSFORM (DBT)**:
-
+- **TRANSFORM (DBT)**:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 📦 staging.raw (Dados Brutos) ->
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 🧼 staging.cleaned (Dados com valor nulo padrão) ->
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 📝 staging.renamed (Dados renomeados seguindo manuais de estilo do [ED](https://docs.dados.rio/guia-desenvolvedores/manual-estilo/#nome-e-ordem-das-colunas) e [BD](https://basedosdados.github.io/mais/style_data/)) ->
-
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 🔶 staging.transformed (Dados com tipos definidos) ->
 
-**LOAD**: -> ⬆️ Carregar Logs para o Banco de Dados
+- **LOAD**: -> ⬆️ Carregar Logs para o Banco de Dados
 
----
 ###
 
 ### Funcionalidades:
@@ -54,9 +48,9 @@ Pare todos os processos que podem interferir com o serviço (🚨 **Param-se tod
    sudo chmod +x stop.sh && ./stop.sh
    ```
 
-**Execute o Servidor Prefect dentro de um container Docker local:**
+#### **Execute o Servidor Prefect dentro de um container Docker local:**
 
-Construa imagem local:
+Construa imagem docker localmente:
 1. : 
    ```sh
    docker build -t terceirizados_pipeline .
@@ -68,34 +62,18 @@ Construa imagem local:
    ```
 &nbsp;&nbsp;&nbsp;&nbsp;pode demorar alguns minutos... ☕ 
 
-Execute o servidor em um container local:
+Execute o servidor em um container docker local:
 
 2. : 
    ```sh
    docker run -it --privileged -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 -p 8050:8050 -p 4200:4200 terceirizados_pipeline
    ```
 
-**Alternativamente, execute o servidor Prefect diretamente no ambiente local:**
-1. : 
-   ```sh
-   prefect server start
-   ```
-
-
 3. :
+   ```sh
+   apollo_1    | Server ready at http://0.0.0.0:4200 🚀
+   ```
    O Servidor Prefect está online!
-
-```sh
-                                         WELCOME TO
-
-_____  _____  ______ ______ ______ _____ _______    _____ ______ _______      ________ _____
-|  __ \|  __ \|  ____|  ____|  ____/ ____|__   __|  / ____|  ____|  __ \ \    / /  ____|  __ \
-| |__) | |__) | |__  | |__  | |__ | |       | |    | (___ | |__  | |__) \ \  / /| |__  | |__) |
-|  ___/|  _  /|  __| |  __| |  __|| |       | |     \___ \|  __| |  _  / \ \/ / |  __| |  _  /
-| |    | | \ \| |____| |    | |___| |____   | |     ____) | |____| | \ \  \  /  | |____| | \ \
-|_|    |_|  \_\______|_|    |______\_____|  |_|    |_____/|______|_|  \_\  \/   |______|_|  \_\
-
-```
 ---
 ### Em outro terminal, execute as funcionalidades do serviço:
 
