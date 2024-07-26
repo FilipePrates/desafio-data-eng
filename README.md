@@ -26,7 +26,8 @@
 
 **LOAD**: -> ⬆️ Carregar Logs para o Banco de Dados
 
-##
+---
+###
 
 ### Funcionalidades:
 - **Captura dos dados mais recentes** (`python run/capture.py`)
@@ -46,8 +47,16 @@ Configure ambiente virtual python, variáveis de ambiente necessárias, e baixe 
    python -m venv orchestrator && source orchestrator/bin/activate && cp .env.example .env && pip install --no-cache-dir -r requirements/start.txt
    ```
 
-#### Execute o Servidor Prefect dentro de um container Docker local
+Pare todos os processos que podem interferir com o serviço (🚨 **Param-se todos os containers docker**, além de processos do host que estejam utilizando as portas necessárias pelo servidor Prefect e as funcionalidades disponibilizadas):
 
+0. :
+   ```sh
+   sudo chmod +x stop.sh && ./stop.sh
+   ```
+
+**Execute o Servidor Prefect dentro de um container Docker local:**
+
+Construa imagem local:
 1. : 
    ```sh
    docker build -t terceirizados_pipeline .
@@ -57,12 +66,21 @@ Configure ambiente virtual python, variáveis de ambiente necessárias, e baixe 
    sudo docker buildx create --name builder
    sudo docker buildx build . --tag terceirizados_pipeline
    ```
-   &nbsp;&nbsp;&nbsp;&nbsp;pode demorar alguns minutos... ☕ 
+&nbsp;&nbsp;&nbsp;&nbsp;pode demorar alguns minutos... ☕ 
+
+Execute o servidor em um container local:
 
 2. : 
    ```sh
    docker run -it --privileged -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 -p 8050:8050 -p 4200:4200 terceirizados_pipeline
    ```
+
+**Alternativamente, execute o servidor Prefect diretamente no ambiente local:**
+1. : 
+   ```sh
+   prefect server start
+   ```
+
 
 3. :
    O Servidor Prefect está online!
@@ -78,18 +96,18 @@ _____  _____  ______ ______ ______ _____ _______    _____ ______ _______      __
 |_|    |_|  \_\______|_|    |______\_____|  |_|    |_____/|______|_|  \_\  \/   |______|_|  \_\
 
 ```
-
-Em outro terminal, execute as funcionalidades do serviço:
+---
+### Em outro terminal, execute as funcionalidades do serviço:
 
 2. :
    ```
-   prefect server create-tenant --name tenant && prefect create project adm_cgu_terceirizados
+   source orchestrator/bin/activate && prefect server create-tenant --name tenant && prefect create project adm_cgu_terceirizados
    ```
    ```
    python ./run/capture.py && python ./run/materialize.py && python ./run/historic_capture.py && python ./run/historic_materialize.py
    ```
 
-Em um terceiro terminal, visualize os resultados:
+### Em um terceiro terminal, visualize os resultados:
 
 3. :
    ```sh
@@ -102,8 +120,9 @@ Em um terceiro terminal, visualize os resultados:
 
 #### **App Dash [localhost:8050](localhost:8050) para visualizar tabelas do PostgreSQL**
 ![dash_visualization_staging_transformed](images/dash_visualization_staging_historic_transformed.png)
+
 ---
-### Programe Cronograma para Captura :
+### Programe Cronograma para Captura de Dados:
 
 1. :
    ```sh
@@ -115,7 +134,7 @@ A Captura e Materialização dos dados mais recentes é programada para ocorrer 
 #### Dashboard Prefect [localhost:8080](localhost:8080) para acompanhar os Flows:
 ![prefect_dashboard_capture_flow_visualization](images/prefect_dashboard_capture_flow_visualization.png)
 
-#### Alternativamente, através de Bash Script:
+#### Alternativamente, tudo através de Bash Script:
 
 0. :
    ```sh
