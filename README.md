@@ -41,12 +41,13 @@ Configure ambiente virtual python, variáveis de ambiente necessárias, e baixe 
    ```sh
    docker build -t terceirizados_pipeline .
    ```
-   ☕ pode demorar alguns minutos.
    ou
    ```sh
    sudo docker buildx create --name builder
    sudo docker buildx build . --tag terceirizados_pipeline
    ```
+   &nbsp;&nbsp;&nbsp;&nbsp;pode demorar alguns minutos... ☕ 
+
 2. : 
    ```sh
    docker run -it --privileged -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 -p 8050:8050 -p 4200:4200 terceirizados_pipeline
