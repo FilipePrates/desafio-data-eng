@@ -25,7 +25,7 @@ Configure ambiente virtual python, variáveis de ambiente necessárias, e baixe 
 
 0. :
    ```sh
-   python -m venv orchestrator && source orchestrator/bin/activate && cp .env.example .env && pip install -r requirements/start.txt
+   python -m venv orchestrator && source orchestrator/bin/activate && cp .env.example .env && pip install --no-cache-dir -r requirements/start.txt
    ```
 
 #### Execute o Servidor Prefect dentro de um container Docker local
@@ -34,6 +34,7 @@ Configure ambiente virtual python, variáveis de ambiente necessárias, e baixe 
    ```sh
    docker build -t terceirizados_pipeline .
    ```
+   ☕ pode demorar alguns minutos.
    ou
    ```sh
    sudo docker buildx create --name builder
