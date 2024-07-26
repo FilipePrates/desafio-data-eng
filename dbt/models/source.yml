@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: adm_cgu_terceirizados__public
+    database: prefect_server
+    schema: public
+    tables:
+      - name: raw
+      - name: historic_raw
+
+  - name: adm_cgu_terceirizados__staging
+    database: prefect_server
+    schema: staging
+    tables:
+      - name: transformed

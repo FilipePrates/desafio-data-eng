@@ -1,0 +1,16 @@
+name: 'adm_cgu_terceirizados'
+version: 1.2.1 # Versão do Projeto
+config-version: 2  # Versão da Configuração
+
+profile: local_profile
+
+model-paths: ["models"]
+
+# Estrutura dos Modelos
+models:
+  # marts:
+  #   +database: "{{ var('database') }}"
+  #   materialized: table
+  staging:
+    +database: "{{ var('database') }}"
+    materialized: view
