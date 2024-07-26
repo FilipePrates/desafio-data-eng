@@ -1,40 +1,190 @@
-# Desafio de Data Engineer - EMD
+<!-- # Desafio Engenheiro de Dados @ Escritório de Dados -->
+# Capture e Materialize os Dados Abertos de Terceirizados de Órgãos Federais
 
-Repositório de instrução para o desafio técnico para vaga de Pessoa Engenheira de Dados no Escritório de Dados do Rio de Janeiro
+### Flow de Captura de Dados
+**SETUP**: (🧹) Limpar Arquivo de Log -> (🔧) Configurar Arquivo de Log ->
 
-## Descrição do desafio
+**EXTRACT**: -> (⬇️) Baixar Dados -> (🧠) Salvar Dados Brutos em Memória ->
 
-Neste desafio você deverá capturar, estruturar, armazenar e transformar dados de Terceirizados de Órgãos Federais, disponíveis no site [Dados Abertos - Terceirizados de Órgãos Federais](https://www.gov.br/cgu/pt-br/acesso-a-informacao/dados-abertos/arquivos/terceirizados).
+**CLEAN**: -> (🔍) Interpretar Dados em DataFrames -> (📥) Salvar Dados como CSVs Localmente ->
 
-Para o desafio, será necessário construir uma pipeline que realiza a extração, processamento e transformação dos dados. Salve os dados de cada mes em um arquivo CSV (estruture os dados da maneira que achar mais conveniente, você tem liberdade para criar novas colunas ou particionar os dados), então carregue os dados para uma tabela no Postgres. Por fim, crie uma tabela derivada usando o DBT. A tabela derivada deverá seguir a padronização especificada no [manual de estilo do Escritorio de Dados](https://docs.dados.rio/guia-desenvolvedores/manual-estilo/#nome-e-ordem-das-colunas). A solução devera contemplar o surgimento de novos dados a cada 4 meses.
+**LOAD**: -> (📦) Carregar CSVs para o Banco de Dados brutos -> (⬆️) Carregar Logs para o Banco de Dados
+
+### Flow de Materialização dos Dados
+
+**SETUP**: (🧹) Limpar Arquivo de Log  -> (🔧) Configurar Arquivo de Log ->
+
+**TRANSFORM (DBT)**: -> (📦) staging.raw (Dados Brutos) -> (🧼) staging.cleaned (Dados com valor nulo padrão) -> 
+    (📝) staging.renamed (Colunas renomeadas seguindo manuais de estilo do [Escritório de Dados](https://docs.dados.rio/guia-desenvolvedores/manual-estilo/#nome-e-ordem-das-colunas) e [Base dos Dados](https://basedosdados.github.io/mais/style_data/)) -> (🔶) staging.transformed (Colunas com tipos definidos.) ->
+
+**LOAD**: -> (⬆️) Carregar Logs para o Banco de Dados
+
+---
+
+Configure ambiente virtual python, variáveis de ambiente necessárias, e baixe os requerimentos do sistema:
+
+0. :
+   ```sh
+   python -m venv orchestrator && source orchestrator/bin/activate && cp .env.example .env && pip install -r requirements/start.txt
+   ```
+
+#### Execute o Servidor Prefect dentro de um container Docker local
+
+1. : 
+   ```sh
+   docker build -t terceirizados_pipeline .
+   ```
+   ou
+   ```sh
+   sudo docker buildx create --name builder
+   sudo docker buildx build . --tag terceirizados_pipeline
+   ```
+2. : 
+   ```sh
+   docker run -it --privileged -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 -p 8050:8050 -p 4200:4200 terceirizados_pipeline
+   ```
+
+3. :
+   O Servidor Prefect está online!
+
+```sh
+                                         WELCOME TO
+
+_____  _____  ______ ______ ______ _____ _______    _____ ______ _______      ________ _____
+|  __ \|  __ \|  ____|  ____|  ____/ ____|__   __|  / ____|  ____|  __ \ \    / /  ____|  __ \
+| |__) | |__) | |__  | |__  | |__ | |       | |    | (___ | |__  | |__) \ \  / /| |__  | |__) |
+|  ___/|  _  /|  __| |  __| |  __|| |       | |     \___ \|  __| |  _  / \ \/ / |  __| |  _  /
+| |    | | \ \| |____| |    | |___| |____   | |     ____) | |____| | \ \  \  /  | |____| | \ \
+|_|    |_|  \_\______|_|    |______\_____|  |_|    |_____/|______|_|  \_\  \/   |______|_|  \_\
+
+```
+
+Em outro terminal, execute as funcionalidades do serviço:
+
+2. :
+   ```
+   prefect server create-tenant --name tenant && prefect create project adm_cgu_terceirizados
+   ```
+   ```
+   python ./run/capture.py && python ./run/materialize.py && python ./run/historic_capture.py && python ./run/historic_materialize.py
+   ```
+
+Em um terceiro terminal, visualize os resultados:
+
+3. :
+   ```sh
+   source orchestrator/bin/activate && pip install -r requirements/results.txt
+   ```
+4. :
+   ```sh
+   python ./run/results.py
+   ```
+
+### App Dash (localhost:8050) para visualizar tabelas do PostgreSQL
+![dash_visualization_staging_transformed](images/dash_visualization_staging_historic_transformed.png)
+![dash_logs_FAIL_historic_capture](images/dash_logs_FAIL_historic_capture.png)
+
+---
+### Programe Cronograma para Captura :
+
+1. :
+   ```sh
+   source orchestrator/bin/activate && python ./run/scheduler.py
+   ```
+
+A Captura e Materialização dos dados mais recentes é programada para ocorrer **a cada 4 meses, começando em Maio**. Se ocorrer uma falha no Flow, uma nova tentativa ocorre diaramente até ser bem sucedida.
+
+### Dashboard Prefect (localhost:8080) para acompanhar os Flows:
+![prefect_dashboard_capture_flow_visualization](images/prefect_dashboard_capture_flow_visualization.png)
+
+### Funcionalidades:
+- **Captura dos dados mais recentes** (`python run/capture.py`)
+- **Materialização dos dados mais recentes** (`python run/materialize.py`)
+- **Captura dos dados históricos** - Todos os dados já disponibilizados (`python run/historic_capture.py`)
+- **Materialização dos dados históricos** - 🚧 Não trata erro de offset de colunas em dados históricos (`python run/historic_materialize.py`)
+- **Scheduler** - Definição de cronograma de execução de flows Prefect de captura e materialização (`python run/scheduler.py`)
+- **Results** - App Dash para visualizar tabelas resultantes armazenadas no banco de dados PostgreSQL (`python run/results.py`)
 
 
-## O que iremos avaliar
+#### Alternativamente, através de Bash Script:
 
-- **Completude**: A solução proposta atende a todos os requisitos do desafio?
-- **Simplicidade**: A solução proposta é simples e direta? É fácil de entender e trabalhar?
-- **Organização**: A solução proposta é organizada e bem documentada? É fácil de navegar e encontrar o que se procura?
-- **Criatividade**: A solução proposta é criativa? Apresenta uma abordagem inovadora para o problema proposto?
-- **Boas práticas**: A solução proposta segue boas práticas de Python, Git, Docker, etc.?
+0. :
+   ```sh
+   sudo chmod +x start.sh stop.sh && stop.sh
+   ```
+1. :
+   ```sh
+   ./start.sh
+   ```
 
-## Atenção
+#### Para parar o Servidor e Agente(s) Prefect
 
-- A solução desse desafio deve ser publicada em um fork deste repositório no GitHub.
-- O link do repositório deve ser enviado até às 23:59, horário de Brasília, do dia 26 de julho de 2024, para o e-mail utilizado para contato com o assunto "Desafio Data Engineer - EMD".
-- Você deve ser capaz de apresentar sua solução, explicando como a idealizou, caso seja aprovado(a) para a próxima etapa.
+0. :
+   ```sh
+   sudo chmod +x stop.sh
+   ```
 
-## Links de referência / utilidades
+1. :
+   ```sh
+   ./stop.sh
+   ```
 
-- Documentação [Prefect](https://docs-v1.prefect.io/)
-- Documentação [DBT](https://docs.getdbt.com/docs/introduction)
-- Instalar e configurar o
-   [Prefect Server](https://docs.prefect.io/orchestration/getting-started/install.html)
-   locamente com um [Docker Agent](https://docs.prefect.io/orchestration/agents/docker.html)
-- [Dados Abertos - Terceirizados de Órgãos Federais](https://www.gov.br/cgu/pt-br/acesso-a-informacao/dados-abertos/arquivos/terceirizados)
-- Repositório pipelines do [Escritorio de Dados](https://github.com/prefeitura-rio/pipelines)
-- Repositório de modelos DBT do [Escritorio de Dados](https://github.com/prefeitura-rio/queries-datario)
-- [Manual de estilo do Escritório de Dados](https://docs.dados.rio/guia-desenvolvedores/manual-estilo/#nome-e-ordem-das-colunas)
-  
-## Dúvidas?
+### Conectar diretamente ao PostgreSQL:
 
-Fale conosco pelo e-mail que foi utilizado para o envio desse desafio.
+1. : 
+   ```
+   docker exec -it $(docker ps | grep 'postgres:11' | awk '{print $1}') bash
+   ```
+2. :
+   ```sh
+   psql -U prefect -d prefect_server -W
+   ```
+3. :
+Escreva a senha: "test-password"
+
+### #help
+###
+caso:
+   ```sh
+   Error: [Errno 2] No such file or directory: 'path/orchestrator/bin/python'
+   ```
+
+1. :
+   ```sh
+   rm -rf "orchestrator"
+   ```
+
+caso:
+```sh
+   (orchestrator) user@machine:~/path$ start.sh
+   Pulling postgres ... done
+   Pulling hasura   ... done
+   Pulling graphql  ... done
+   Pulling apollo   ... done
+   Pulling towel    ... done
+   Pulling ui       ... done
+   Starting tmp_postgres_1 ... error
+
+   ERROR: for tmp_postgres_1  Cannot start service postgres: network $ID not found
+
+   ERROR: for postgres  Cannot start service postgres: network $ID not found
+   ERROR: Encountered errors while bringing up the project.
+   ```
+1. :
+   ```sh
+   docker network prune -f
+   ```
+
+   se erro permanecer, limpe todos os processos relacionados com a pipeline:
+1. 
+   ```sh
+   ./stop.sh
+   ```
+
+###
+
+caso:
+&nbsp; Sistema Operacional host seja Windows:
+
+1. :
+   Tente através do WSL

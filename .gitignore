@@ -1,0 +1,10 @@
+.env
+*.csv
+*.xlsx
+# *.txt
+.~lock.*
+__pycache__/
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+orchestrator/
