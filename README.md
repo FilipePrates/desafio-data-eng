@@ -54,7 +54,7 @@ Configure o ambiente virtual python (venv):
 
 #### **Execute o Servidor Prefect dentro de um container Docker local:**
 
-Construa a imagem docker localmente:
+Construa a imagem docker local:
 1. : 
    ```sh
    docker build -t terceirizados_pipeline .

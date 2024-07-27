@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Modulo com as funções auxiliares para os Flows
 """
