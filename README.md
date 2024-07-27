@@ -14,6 +14,7 @@
 - **SETUP**: 🧹 Limpar Arquivo de Log  -> 🔧 Configurar Arquivo de Log ->
 
 - **TRANSFORM (DBT)**:
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 📦 staging.raw (Dados Brutos) ->
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 🧼 staging.cleaned (Dados com valor nulo padrão) ->
