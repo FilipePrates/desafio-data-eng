@@ -97,6 +97,7 @@ Execute o servidor em um container docker local:
    ```
 
 #### **App Dash [localhost:8050](localhost:8050) para visualizar tabelas do PostgreSQL**
+[localhost:8050](localhost:8050)
 ![dash_visualization_staging_transformed](images/dash_visualization_staging_historic_transformed.png)
 
 ---
@@ -110,8 +111,8 @@ Execute o servidor em um container docker local:
 A Captura e Materialização dos dados mais recentes é programada para ocorrer **a cada 4 meses, começando em Maio**. Se ocorrer uma falha no Flow, uma nova tentativa ocorre diaramente até ser bem sucedida.
 
 #### Dashboard Prefect [localhost:8080](localhost:8080) para acompanhar os Flows:
+[localhost:8080](localhost:8080)
 ![prefect_dashboard_capture_flow_visualization](images/prefect_dashboard_capture_flow_visualization.png)
-
 #### Alternativamente, tudo através de Bash Script:
 
 0. :
