@@ -45,7 +45,7 @@ Configure o ambiente virtual python (venv):
    python -m venv orchestrator && source orchestrator/bin/activate && cp .env.example .env && pip install --no-cache-dir -r requirements/start.txt
    ```
 
-Pare todos os processos que podem interferir com o serviço (🚨 **Param-se todos os containers docker**, além de processos do host que estejam utilizando as portas necessárias pelo servidor Prefect e as funcionalidades disponibilizadas):
+🚨 **Param-se todos os containers docker**, além de processos do host que estejam utilizando as portas necessárias pelo servidor Prefect e as funcionalidades disponibilizadas:
 
 0. :
    ```sh
@@ -54,7 +54,7 @@ Pare todos os processos que podem interferir com o serviço (🚨 **Param-se tod
 
 #### **Execute o Servidor Prefect dentro de um container Docker local:**
 
-Construa imagem docker localmente:
+Construa a imagem docker localmente:
 1. : 
    ```sh
    docker build -t terceirizados_pipeline .
@@ -66,7 +66,7 @@ Construa imagem docker localmente:
    ```
 &nbsp;&nbsp;&nbsp;&nbsp;pode demorar alguns minutos... ☕ 
 
-Execute o servidor em um container docker local:
+Execute o Servidor Prefect em um container docker local:
 
 2. : 
    ```sh
@@ -77,7 +77,7 @@ Execute o servidor em um container docker local:
    ```sh
    apollo_1    | Server ready at http://0.0.0.0:4200 🚀
    ```
-   O Servidor Prefect está online!
+O Servidor Prefect está online!
 ---
 ### Em outro terminal, execute as funcionalidades do serviço:
 
@@ -90,14 +90,16 @@ Execute o servidor em um container docker local:
    ```
    python ./run/capture.py && python ./run/materialize.py && python ./run/historic_capture.py && python ./run/historic_materialize.py
    ```
+6. :
+   Observe os logs no terminal do Servidor Prefect.
 
 ### Em um terceiro terminal, visualize os resultados:
 
-6. :
+7. :
    ```sh
    source orchestrator/bin/activate && pip install -r requirements/results.txt
    ```
-7. :
+8. :
    ```sh
    python ./run/results.py
    ```
