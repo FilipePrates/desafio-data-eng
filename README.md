@@ -77,9 +77,9 @@ Execute o servidor em um container docker local:
 ---
 ### Em outro terminal, execute as funcionalidades do serviço:
 
-2. :
+4. :
    ```
-       && prefect server create-tenant --name tenant && prefect create project adm_cgu_terceirizados
+   source orchestrator/bin/activate && prefect server create-tenant --name tenant && prefect create project adm_cgu_terceirizados
    ```
    ```
    python ./run/capture.py && python ./run/materialize.py && python ./run/historic_capture.py && python ./run/historic_materialize.py
@@ -87,11 +87,11 @@ Execute o servidor em um container docker local:
 
 ### Em um terceiro terminal, visualize os resultados:
 
-3. :
+5. :
    ```sh
    source orchestrator/bin/activate && pip install -r requirements/results.txt
    ```
-4. :
+6. :
    ```sh
    python ./run/results.py
    ```
@@ -102,7 +102,7 @@ Execute o servidor em um container docker local:
 ---
 ### Programe Cronograma para Captura de Dados:
 
-1. :
+7. :
    ```sh
    source orchestrator/bin/activate && python ./run/scheduler.py
    ```
@@ -137,15 +137,15 @@ A Captura e Materialização dos dados mais recentes é programada para ocorrer 
 
 ### Conectar diretamente ao PostgreSQL:
 
-1. : 
+8. : 
    ```
    docker exec -it $(docker ps | grep 'postgres:11' | awk '{print $1}') bash
    ```
-2. :
+9. :
    ```sh
    psql -U prefect -d prefect_server -W
    ```
-3. :
+10. :
 Escreva a senha: "test-password"
 
 ### #help
@@ -192,8 +192,7 @@ caso:
 caso:
 &nbsp; Sistema Operacional host seja Windows:
 
-1. :
-   Tente através do WSL
+1. : Utilize o WSL
 
 caso:
 &nbsp; Falha (</>) em alguma _@task_ dos Flows:
@@ -210,8 +209,7 @@ Visualize resultados parciais e logs de falha em [localhost:8050](localhost:8050
 ![dash_logs_FAIL_historic_capture](images/dash_logs_FAIL_historic_capture.png)
 
 ---
-
-### Dicionário de Dados Materializados no PostgreSQL:
+#### Dicionário de Dados Materializados no PostgreSQL:
 ####
 
 | Column Name                      | Data Type        | Descrição                                                                 |
@@ -241,6 +239,5 @@ Visualize resultados parciais e logs de falha em [localhost:8050](localhost:8050
 | timestamp_captura                | TIMESTAMP        | Timestamp da captura dos dados.                                           |
 
 ---
-
 Para histórico git antes de (26/jul): 
 https://github.com/FilipePrates/Desafio-CIVITAS-Data-Engineer/commits/main/
