@@ -36,9 +36,9 @@
 - **Results** - App Dash para visualizar tabelas resultantes armazenadas no banco de dados PostgreSQL (`python run/results.py`)
 
 ---
-**Para Capturar e Materializar os Dados Abertos de Terceirizados de Órgãos Federais:**
+### Para Capturar e Materializar os Dados Abertos de Terceirizados de Órgãos Federais:
 
-Configure ambiente virtual python, variáveis de ambiente necessárias, e baixe os requerimentos do sistema:
+Configure o ambiente virtual python (venv):
 
 0. :
    ```sh
@@ -85,17 +85,19 @@ Execute o servidor em um container docker local:
    ```
    source orchestrator/bin/activate && prefect server create-tenant --name tenant && prefect create project adm_cgu_terceirizados
    ```
+
+5. :
    ```
    python ./run/capture.py && python ./run/materialize.py && python ./run/historic_capture.py && python ./run/historic_materialize.py
    ```
 
 ### Em um terceiro terminal, visualize os resultados:
 
-5. :
+6. :
    ```sh
    source orchestrator/bin/activate && pip install -r requirements/results.txt
    ```
-6. :
+7. :
    ```sh
    python ./run/results.py
    ```
@@ -107,7 +109,7 @@ Execute o servidor em um container docker local:
 ---
 ### Programe Cronograma para Captura de Dados:
 
-7. :
+8. :
    ```sh
    source orchestrator/bin/activate && python ./run/scheduler.py
    ```
@@ -142,15 +144,15 @@ A Captura e Materialização dos dados mais recentes é programada para ocorrer 
 
 ### Conectar diretamente ao PostgreSQL:
 
-8. : 
+9. : 
    ```
    docker exec -it $(docker ps | grep 'postgres:11' | awk '{print $1}') bash
    ```
-9. :
+10. :
    ```sh
    psql -U prefect -d prefect_server -W
    ```
-10. :
+11. :
 Escreva a senha: "test-password"
 
 ### #help
