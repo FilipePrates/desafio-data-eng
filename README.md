@@ -15,8 +15,11 @@
 
 - **TRANSFORM (DBT)**:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 📦 staging.raw (Dados Brutos) ->
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 🧼 staging.cleaned (Dados com valor nulo padrão) ->
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 📝 staging.renamed (Dados renomeados seguindo manuais de estilo do [ED](https://docs.dados.rio/guia-desenvolvedores/manual-estilo/#nome-e-ordem-das-colunas) e [BD](https://basedosdados.github.io/mais/style_data/)) ->
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> 🔶 staging.transformed (Dados com tipos definidos) ->
 
 - **LOAD**: -> ⬆️ Carregar Logs para o Banco de Dados
