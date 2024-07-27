@@ -45,7 +45,7 @@ Configure o ambiente virtual python (venv):
    python -m venv orchestrator && source orchestrator/bin/activate && cp .env.example .env && pip install --no-cache-dir -r requirements/start.txt
    ```
 
-🚨 **Param-se todos os containers docker**, além de processos do host que estejam utilizando as portas necessárias pelo servidor Prefect e as funcionalidades disponibilizadas:
+**Param-se todos os containers docker**, além de processos do host que estejam utilizando as portas necessárias pelo servidor Prefect e as funcionalidades disponibilizadas:
 
 0. :
    ```sh
