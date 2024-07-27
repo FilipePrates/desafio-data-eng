@@ -4,7 +4,7 @@
 ### Flow de Captura de Dados:
 - **SETUP**: 🧹 Limpar Arquivo de Log -> 🔧 Configurar Arquivo de Log ->
 
-- **EXTRACT**: -> ⬇️ Baixar Dados -> 🧠 Salvar Dados Brutos em Memória ->
+- **EXTRACT**: -> ⬇️ Baixar Dados do [portal de Dados Abertos da CGU](https://www.gov.br/cgu/pt-br/acesso-a-informacao/dados-abertos/arquivos/terceirizados) -> 🧠 Salvar Dados Brutos em Memória ->
 
 - **CLEAN**: -> 🔍 Interpretar Dados em DataFrames -> 📝 Salvar Dados como CSVs Localmente ->
 
